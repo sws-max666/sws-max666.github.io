@@ -214,6 +214,56 @@
             .buttons { flex-direction: column; }
             .btn { width: 100%; box-sizing: border-box; }
         }
+                /* 故障风特效 */
+        .glitch {
+            position: relative;
+            color: white;
+            animation: glitch-skew 4s infinite linear alternate-reverse;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 red;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 blue;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 83px, 0); }
+            20% { clip: rect(62px, 9999px, 14px, 0); }
+            40% { clip: rect(33px, 9999px, 91px, 0); }
+            60% { clip: rect(89px, 9999px, 22px, 0); }
+            80% { clip: rect(5px, 9999px, 67px, 0); }
+            100% { clip: rect(77px, 9999px, 35px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(12px, 9999px, 59px, 0); }
+            40% { clip: rect(85px, 9999px, 33px, 0); }
+            60% { clip: rect(22px, 9999px, 75px, 0); }
+            80% { clip: rect(99px, 9999px, 5px, 0); }
+            100% { clip: rect(40px, 9999px, 88px, 0); }
+        }
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(1deg); }
+            60% { transform: skew(-1deg); }
+            80% { transform: skew(2deg); }
+            100% { transform: skew(0deg); }
+        }
     </style>
 </head>
 <body>
@@ -228,7 +278,7 @@
             <img src="photo.png" alt="我的头像" class="avatar">
         </div>
         
-        <h1>👋 你好，我是 sws-max666</h1>
+        <h1><span class="glitch" data-text="你好，我是 sws-max666">👋 你好，我是 sws-max666</span></h1>
         <p class="subtitle" id="typewriter"></p>
 
         <div class="skills">
@@ -286,5 +336,42 @@
             }
         });
     </script>  
+        <script>
+        // 鼠标星光拖尾特效
+        document.addEventListener('mousemove', function(e) {
+            // 控制生成星星的频率
+            if (Math.random() > 0.3) return; 
+
+            let sparkle = document.createElement('div');
+            sparkle.style.position = 'fixed';
+            sparkle.style.left = e.clientX + 'px';
+            sparkle.style.top = e.clientY + 'px';
+            sparkle.style.width = '6px';
+            sparkle.style.height = '6px';
+            sparkle.style.borderRadius = '50%';
+            // 随机颜色（蓝、绿、白、微黄）
+            let colors = ['#3b82f6', '#2ea44f', '#ffffff', '#fef08a'];
+            sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            sparkle.style.boxShadow = `0 0 10px ${sparkle.style.backgroundColor}`;
+            sparkle.style.pointerEvents = 'none'; // 防止挡住鼠标点击
+            sparkle.style.zIndex = '9999';
+            sparkle.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            document.body.appendChild(sparkle);
+
+            // 让星星随机往四周飘落，然后消失
+            setTimeout(() => {
+                let x = (Math.random() - 0.5) * 100;
+                let y = (Math.random() - 0.5) * 100 + 50; // 重力向下
+                sparkle.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+                sparkle.style.opacity = '0';
+            }, 10);
+
+            // 动画结束移除元素
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
