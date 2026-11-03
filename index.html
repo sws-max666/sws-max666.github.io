@@ -229,7 +229,7 @@
         </div>
         
         <h1>👋 你好，我是 sws-max666</h1>
-        <p class="subtitle">欢迎来到我的个人主页！<br>我是一名正在探索代码世界的初学者。</p>
+        <p class="subtitle" id="typewriter"></p>
 
         <div class="skills">
             <span class="skill-tag">HTML</span>
@@ -244,5 +244,57 @@
         </div>
     </div>
 
+<script>
+        // 魔法1：打字机效果
+        const text = "欢迎来到我的个人主页！\n我是一名正在探索代码世界的初学者。";
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                // 将换行符替换成 <br> 标签，保持文字换行
+                document.getElementById("typewriter").innerHTML = text.substring(0, i+1).replace(/\n/g, '<br>');
+                i++;
+                setTimeout(type, 80); // 80毫秒打一个字
+            }
+        }
+        type();
+
+        // 魔法2：3D 视差倾斜卡片
+        const card = document.querySelector('.card');
+        document.addEventListener('mousemove', (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            card.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
+        });
+
+        // 魔法3：点击粒子爆炸特效
+        document.addEventListener('click', function(e) {
+            let colors = ['#2ea44f', '#3b82f6', '#ffffff']; // 绿、蓝、白
+            for (let i = 0; i < 15; i++) {
+                let particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '8px';
+                particle.style.height = '8px';
+                particle.style.borderRadius = '50%';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = e.pageX + 'px';
+                particle.style.top = e.pageY + 'px';
+                particle.style.pointerEvents = 'none';
+                particle.style.transition = 'all 0.8s ease-out';
+                document.body.appendChild(particle);
+                
+                let x = (Math.random() - 0.5) * 200;
+                let y = (Math.random() - 0.5) * 200;
+                setTimeout(() => {
+                    particle.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+                    particle.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => { particle.remove(); }, 800);
+            }
+        });
+    </script>  
 </body>
 </html>
